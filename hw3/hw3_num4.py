@@ -1,0 +1,27 @@
+
+
+#hw3_num4.py
+#Austin Longo
+#9/26/13
+
+#! /usr/bin/python
+import sys
+import longo #collection of frequently used custom functions
+
+print("Random 100-digit number:")
+print(longo.random_n_digit(100))
+print("")
+print("Next prime after 2013^50:")
+print(longo.next_prime(2013**50))
+
+
+'''
+Sample Output:
+--------------
+
+#Random 100-digit number:
+3841858218542139287678165091156742086057129422057455706472237697388889845229845015631692374546790188
+
+Next prime after 2013^50:
+1556642001415450885363011926342364892322591839000398286585785855871067460392965421912430859681416618309437233804422680987742255926821108997052133833582998914043034313
+'''
