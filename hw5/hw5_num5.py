@@ -12,6 +12,8 @@ import math
 import string
 import bisect
 
+
+#//////////////////////////////////////////////////////////////////////////////
 #word_chain takes a collection of words, converts them to alphagrams and outputs
 #one of the longest word chains
 def word_chain(collection):
@@ -41,12 +43,13 @@ def word_chain(collection):
 			if(binary_search(new_list, new_word) != -1):
 				g.addEdge(word, new_word)
 				print(new_word)
-        print(g.getVertices())
-        print(g.printEdges())
-        print(g.getEdges())
+    
+    print(g.getVertices())
+    print(g.printEdges())
+    print(g.getEdges())
 	
     g.dfs
-
+#//////////////////////////////////////////////////////////////////////////////
 
 
 #Helper Functions//////////////////////////////////////////////////////////////
@@ -55,6 +58,7 @@ def alphagramatize(word):
 	word = word.upper()
 	return ''.join(sorted(c for c in word if c >= 'A' and c <= 'Z'))
 
+#------------------------------------------------------------------------------
 #Binary search function implemented with the bisect module
 def binary_search(a, x, lo=0, hi=None):   # can't use a to specify default for hi
     hi = hi if hi is not None else len(a) # hi defaults to len(a)   
@@ -89,7 +93,7 @@ class Vertex:
     def getId(self):
         return self.id
 
-
+#Graph-------------------------------------------------------------------------
 class Graph:
     def __init__(self):
         self.vertList = {}
@@ -157,9 +161,8 @@ class Graph:
     def postVisit(self, v):
     	v.stopTime = self.time
     	self.time += 1
-
-
 #//////////////////////////////////////////////////////////////////////////////			
+
 
 #------------------------------------------------------------------------------
 #TESTS/RUNS
