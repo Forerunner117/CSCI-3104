@@ -42,25 +42,24 @@ def word_chain(collection):
             new_word = alphagramatize(word+c)
             if(binary_search(new_list, new_word) != -1):
                 g.addEdge(word, new_word)
-                print(new_word) #REMOVE PRINT
-    
+
     print(g.getVertices())
     print(g.printEdges())
     print(g.getEdges())
-    g.dfs
+    g.dfs()
 #//////////////////////////////////////////////////////////////////////////////
 
 
 #Helper Functions//////////////////////////////////////////////////////////////
 #alphagramatize converts the input word to its alphagram
-def alphagramatize(word): 
-	word = word.upper()
-	return ''.join(sorted(c for c in word if c >= 'A' and c <= 'Z'))
+def alphagramatize(word):
+    word = word.upper()
+    return ''.join(sorted(c for c in word if c >= 'A' and c <= 'Z'))
 
 #------------------------------------------------------------------------------
 #Binary search function implemented with the bisect module
 def binary_search(a, x, lo=0, hi=None):   # can't use a to specify default for hi
-    hi = hi if hi is not None else len(a) # hi defaults to len(a)   
+    hi = hi if hi is not None else len(a) # hi defaults to len(a)
     pos = bisect.bisect_left(a,x,lo,hi)   # find insertion position
     return (pos if pos != hi and a[pos] == x else -1) # don't walk off the end
 #//////////////////////////////////////////////////////////////////////////////
@@ -87,7 +86,7 @@ class Vertex:
         return self.connectedTo.keys()
 
     def __iter__(self):
-    	return(iter(self.connectedTo.values()))
+        return(iter(self.connectedTo.values()))
 
     def getId(self):
         return self.id
@@ -129,45 +128,49 @@ class Graph:
         return iter(self.vertList.values())
 
     def printEdges(self):
-    	for v in self.__iter__():
-    		print(v.__str__())
+        for v in self.__iter__():
+            print(v.__str__())
 
     def getEdges(self):
-        return iter(v.__iter__())
+        for v in self.__iter__():
+            edges = iter(v.__iter__())
+        return edges
 
     def dfs(self):
+        print("In DFS")
         for src_word in self.__iter__(): #This would iterate over ALL verticies, I just want to start at sources.
-        if(v.visited == False):
-            explore(self, v)
-        self.componentCntr += 1
+            
+            if(src_word.visited == False):
+                self.explore(src_word)
+            self.componentCntr += 1
 
     def explore(self, v):
         self.visit(v)
         self.preVisit(v)
-        for v in v.__iter__(): #This will iterate over ALL verticies connected to v
-            #If v.next.visited == False (But my data structure is not set up to look at .next ...)
+        for v in v.getConnections(): #This will iterate over ALL verticies connected to v
+            if(v.visited == False):#If v.next.visited == False (But my data structure is not set up to look at .next ...)
                 #Do something useful
                 print("blarg") #REMOVE PRINT
         self.postVisit(v)
 
     def visit(self, v):
-    	v.visited = True
+        v.visited = True
 
     def preVisit(self, v):
-    	v.startTime = self.time
-    	self.time += 1
+        v.startTime = self.time
+        self.time += 1
 
     def postVisit(self, v):
-    	v.stopTime = self.time
-    	self.time += 1
-#//////////////////////////////////////////////////////////////////////////////			
+        v.stopTime = self.time
+        self.time += 1
+#//////////////////////////////////////////////////////////////////////////////
 
 
 #------------------------------------------------------------------------------
 #TESTS/RUNS
 #------------------------------------------------------------------------------
 #Test on readable amount of words (uncomment and comment other one)
-words = ['cat', 'cat', 'catz', 'tac', 'cats', 'dog', 'dogs', 'godes', 'bird']
+words = ['a', 'aa', 'cat', 'cat', 'catz', 'tac', 'cats', 'dog', 'dogs', 'godz', 'godes', 'bird']
 
 #words = [word.strip() for word in open('wordlst.txt')]
 word_chain(words)
