@@ -137,21 +137,19 @@ class Graph:
         return iter(v.__iter__())
 
     def dfs(self):
-    	for src_word in self.__iter__(): #This would iterate over ALL verticies, I just want to start at sources.
- 			if(v.visited == False):
- 				explore(self, v)
- 			self.componentCntr += 1
+        for src_word in self.__iter__(): #This would iterate over ALL verticies, I just want to start at sources.
+        if(v.visited == False):
+            explore(self, v)
+        self.componentCntr += 1
 
-	def explore(self, v):
-   		self.visit(v)
-   		self.preVisit(v)
-
-   		for v in v.__iter__(): #This will iterate over ALL verticies connected to v
-   			#If v.next.visited == False (But my data structure is not set up to look at .next ...)
+    def explore(self, v):
+        self.visit(v)
+        self.preVisit(v)
+        for v in v.__iter__(): #This will iterate over ALL verticies connected to v
+            #If v.next.visited == False (But my data structure is not set up to look at .next ...)
                 #Do something useful
-            print("blarg")
-   		
-   		self.postVisit(v)
+                print("blarg") #REMOVE PRINT
+        self.postVisit(v)
 
     def visit(self, v):
     	v.visited = True
