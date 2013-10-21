@@ -53,7 +53,7 @@ def word_chain(collection):
 
 
 #Helper Functions//////////////////////////////////////////////////////////////
-#alphagramatize converts the input collection, or word, to its alphagram
+#alphagramatize converts the input word to its alphagram
 def alphagramatize(word): 
 	word = word.upper()
 	return ''.join(sorted(c for c in word if c >= 'A' and c <= 'Z'))
@@ -137,7 +137,7 @@ class Graph:
         return iter(v.__iter__())
 
     def dfs(self):
-    	for src_word in self.getVertex():
+    	for src_word in self.__iter__(): #This would iterate over ALL verticies, I just want to start at sources.
  			if(v.visited == False):
  				explore(self, v)
  			self.componentCntr += 1
@@ -146,8 +146,10 @@ class Graph:
    		self.visit(v)
    		self.preVisit(v)
 
-   		for v in v.__iter__():
-   			print("blarg")
+   		for v in v.__iter__(): #This will iterate over ALL verticies connected to v
+   			#If v.next.visited == False (But my data structure is not set up to look at .next ...)
+                #Do something useful
+            print("blarg")
    		
    		self.postVisit(v)
 
