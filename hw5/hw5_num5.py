@@ -17,39 +17,38 @@ import bisect
 #word_chain takes a collection of words, converts them to alphagrams and outputs
 #one of the longest word chains
 def word_chain(collection):
-	#map the alphagramatize function onto each word in collection
-	new_list = map(alphagramatize, collection)
-	
-	#remove duplicates by converting to a set
-	new_list = set(new_list)
+    #map the alphagramatize function onto each word in collection
+    new_list = map(alphagramatize, collection)
 
-	#convert back to a list... cause I like lists
-	new_list = list(new_list)
-	
-	#sort the set
-	new_list.sort()
+    #remove duplicates by converting to a set
+    new_list = set(new_list)
 
-	#create new empty graph
-	g = Graph()
+    #convert back to a list... cause I like lists
+    new_list = list(new_list)
 
-	#add all words to graph
-	for word in new_list:
-		g.addVertex(word)
+    #sort the set
+    new_list.sort()
 
-	#fill graph with valid word chains
-	for word in g.getVertices():
-		for c in string.ascii_lowercase:
-			new_word = alphagramatize(word+c)
-			if(binary_search(new_list, new_word) != -1):
-				g.addEdge(word, new_word)
-				print(new_word)
+    #create new empty graph
+    g = Graph()
+
+    #add all words to graph
+    for word in new_list:
+        g.addVertex(word)
+
+    #fill graph with valid word chains
+    for word in g.getVertices():
+        for c in string.ascii_lowercase:
+            new_word = alphagramatize(word+c)
+            if(binary_search(new_list, new_word) != -1):
+                g.addEdge(word, new_word)
+                print(new_word) #REMOVE PRINT
     
     print(g.getVertices())
     print(g.printEdges())
     print(g.getEdges())
-	
     g.dfs
-#//////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 
 #Helper Functions//////////////////////////////////////////////////////////////
