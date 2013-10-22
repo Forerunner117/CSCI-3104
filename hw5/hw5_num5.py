@@ -36,21 +36,62 @@ def word_chain(collection):
 
     #add all words to graph
     for word in new_list:
-        g.add_node(word)
+        g.add_node(Node(word))
 
     #fill graph with valid word chains
     for word in g.nodes():
         for c in string.ascii_lowercase:
-            new_word = alphagramatize(word+c)
-            if(binary_search(new_list, new_word) != -1):
+            new_word = Node(alphagramatize(word.key+c))
+            if(binary_search(new_list, new_word.key) != -1):
                 g.add_edge(word, new_word)
 
-    print longest_path(g)
+    '''
+    #Naive approach            
+    currentMax = 0
+    longestPath = 0
+    for startNode in g.nodes_iter():
+        for endNode in g.nodes_iter():
+            if(len(endNode) >= len(startNode)):
+                for path in nx.all_simple_paths(g, startNode, endNode):
+                    if len(path) > currentMax:
+                        currentMax = len(path)
+                        longestPath = path
+    
+    print(longestPath)
+    '''
 
-    print(g.nodes())
-    print(g.edges())
+    dfs = DFS()
+
+    print dfs.dfs(g)
+    #print nx.topological_sort(g)
+    #print longest_path(g)
 
 #//////////////////////////////////////////////////////////////////////////////
+
+class Node:    
+    def __init__(self, key):
+        self.key = key
+        self.visited = False
+        self.component = -1
+
+class DFS:
+    def __init__(self):
+        self.componentCntr = 0
+
+    def dfs(self, G):
+        for node in nx.topological_sort(G):
+            if node.visited != True:
+                self.explore(node)
+
+    def explore(self, node):
+        node.component = self.componentCntr
+        print node.component
+        self.componentCntr += 1
+
+
+
+
+
 
 def longest_path(G):
     dist = {} # stores [node, distance] pair
@@ -65,7 +106,7 @@ def longest_path(G):
     while node in dist:
         node, length = dist[node]
         path.append(node)
-    return list(reversed(path))
+    return list(path)
 
 
 #Helper Functions//////////////////////////////////////////////////////////////
