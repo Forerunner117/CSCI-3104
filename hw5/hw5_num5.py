@@ -32,8 +32,8 @@ def word_chain(collection):
     new_list.sort()
 
     #create new empty graph
-    g = nx.path_graph(len(new_list), create_using = nx.DiGraph())
-    #g = nx.DiGraph()
+    #g = nx.path_graph(len(new_list), create_using = nx.DiGraph())
+    g = nx.DiGraph()
 
     #add all words to graph
     for word in new_list:
@@ -44,7 +44,7 @@ def word_chain(collection):
         for c in string.ascii_lowercase:
             new_word = alphagramatize(word+c)
             if(binary_search(new_list, new_word) != -1):
-                g.add_edge(word, new_word, weight = 1)
+                g.add_edge(word, new_word)
 
     #H = nx.Graph(g)
     #for u, v in H.edges():
@@ -133,7 +133,7 @@ def binary_search(a, x, lo=0, hi=None):   # can't use a to specify default for h
 #TESTS/RUNS
 #------------------------------------------------------------------------------
 #Test on readable amount of words (uncomment and comment other one)
-words = ['a', 'aa', 'catz', 'cat', 'cat', 'tac', 'cats', 'dog', 'dogs', 'godz', 'godes', 'bird']
+#words = ['a', 'aa', 'catz', 'cat', 'cat', 'tac', 'cats', 'dog', 'dogs', 'godz', 'godes', 'bird']
 
-#words = [word.strip() for word in open('wordlst.txt')]
+words = [word.strip() for word in open('wordlst.txt')]
 word_chain(words)

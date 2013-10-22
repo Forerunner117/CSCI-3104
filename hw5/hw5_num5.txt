@@ -201,3 +201,10 @@ class Graph:
 
 words = [word.strip() for word in open('wordlst.txt')]
 word_chain(words)
+
+
+
+#Longest Chain (one-of):
+#//////////////////////////////////////////////////////////////////////////////
+['BIRS', 'BEIRS', 'BEIRST', 'BEILRST', 'BEHILRST', 'ABEHILRST', 'ABEHILRSST', 
+ 'ABEEHILRSST', 'ABEEHILRSSST', 'ABEEEHILRSSST', 'ABEEEHILPRSSST']
