@@ -11,7 +11,8 @@ import random
 import math
 import string
 import bisect
-
+import collections
+import networkx as nx
 
 #//////////////////////////////////////////////////////////////////////////////
 #word_chain takes a collection of words, converts them to alphagrams and outputs
@@ -20,34 +21,51 @@ def word_chain(collection):
     #map the alphagramatize function onto each word in collection
     new_list = map(alphagramatize, collection)
 
+    #print(new_list)
     #remove duplicates by converting to a set
     new_list = set(new_list)
 
     #convert back to a list... cause I like lists
     new_list = list(new_list)
 
-    #sort the set
+    #sort the list
     new_list.sort()
 
     #create new empty graph
-    g = Graph()
+    g = nx.DiGraph()
 
     #add all words to graph
     for word in new_list:
-        g.addVertex(word)
+        g.add_node(word)
 
     #fill graph with valid word chains
-    for word in g.getVertices():
+    for word in g.nodes():
         for c in string.ascii_lowercase:
             new_word = alphagramatize(word+c)
             if(binary_search(new_list, new_word) != -1):
-                g.addEdge(word, new_word)
+                g.add_edge(word, new_word)
 
-    print(g.getVertices())
-    print(g.printEdges())
-    print(g.getEdges())
-    g.dfs()
+    print longest_path(g)
+
+    print(g.nodes())
+    print(g.edges())
+
 #//////////////////////////////////////////////////////////////////////////////
+
+def longest_path(G):
+    dist = {} # stores [node, distance] pair
+    for node in nx.topological_sort(G):
+        pairs = [[dist[v][0]+1,v] for v in G.pred[node]] # incoming pairs
+        if pairs:
+            dist[node] = max(pairs)
+        else:
+            dist[node] = (0, node)
+    node, max_dist  = max(dist.items())
+    path = [node]
+    while node in dist:
+        node, length = dist[node]
+        path.append(node)
+    return list(reversed(path))
 
 
 #Helper Functions//////////////////////////////////////////////////////////////
@@ -66,111 +84,12 @@ def binary_search(a, x, lo=0, hi=None):   # can't use a to specify default for h
 
 
 
-#Graph Data Structure//////////////////////////////////////////////////////////
-class Vertex:
-    def __init__(self,key):
-        self.id = key
-        self.connectedTo = {}
-        self.visited = False
-        self.component = -1
-        self.startTime = -1
-        self.finishTime = -1
-
-    def addNeighbor(self,nbr,weight=0):
-        self.connectedTo[nbr] = weight
-
-    def __str__(self):
-        return str(self.id) + ' connectedTo: ' + str([x.id for x in self.connectedTo])
-
-    def getConnections(self):
-        return self.connectedTo.keys()
-
-    def __iter__(self):
-        return(iter(self.connectedTo.values()))
-
-    def getId(self):
-        return self.id
-
-#Graph-------------------------------------------------------------------------
-class Graph:
-    def __init__(self):
-        self.vertList = {}
-        self.numVertices = 0
-        self.componentCntr = 0
-        self.time = 0
-
-    def addVertex(self,key):
-        self.numVertices = self.numVertices + 1
-        newVertex = Vertex(key)
-        self.vertList[key] = newVertex
-        return newVertex
-
-    def getVertex(self,n):
-        if n in self.vertList:
-            return self.vertList[n]
-        else:
-            return None
-
-    def __contains__(self,n):
-        return n in self.vertList
-
-    def addEdge(self,f,t,cost=0):
-        if f not in self.vertList:
-            nv = self.addVertex(f)
-        if t not in self.vertList:
-            nv = self.addVertex(t)
-        self.vertList[f].addNeighbor(self.vertList[t], cost)
-
-    def getVertices(self):
-        return self.vertList.keys()
-
-    def __iter__(self):
-        return iter(self.vertList.values())
-
-    def printEdges(self):
-        for v in self.__iter__():
-            print(v.__str__())
-
-    def getEdges(self):
-        for v in self.__iter__():
-            edges = iter(v.__iter__())
-        return edges
-
-    def dfs(self):
-        print("In DFS")
-        for src_word in self.__iter__(): #This would iterate over ALL verticies, I just want to start at sources.
-            
-            if(src_word.visited == False):
-                self.explore(src_word)
-            self.componentCntr += 1
-
-    def explore(self, v):
-        self.visit(v)
-        self.preVisit(v)
-        for v in v.getConnections(): #This will iterate over ALL verticies connected to v
-            if(v.visited == False):#If v.next.visited == False (But my data structure is not set up to look at .next ...)
-                #Do something useful
-                print("blarg") #REMOVE PRINT
-        self.postVisit(v)
-
-    def visit(self, v):
-        v.visited = True
-
-    def preVisit(self, v):
-        v.startTime = self.time
-        self.time += 1
-
-    def postVisit(self, v):
-        v.stopTime = self.time
-        self.time += 1
-#//////////////////////////////////////////////////////////////////////////////
-
 
 #------------------------------------------------------------------------------
 #TESTS/RUNS
 #------------------------------------------------------------------------------
 #Test on readable amount of words (uncomment and comment other one)
-words = ['a', 'aa', 'cat', 'cat', 'catz', 'tac', 'cats', 'dog', 'dogs', 'godz', 'godes', 'bird']
+words = ['a', 'aa', 'catz', 'cat', 'cat', 'tac', 'cats', 'dog', 'dogs', 'godz', 'godes', 'bird']
 
 #words = [word.strip() for word in open('wordlst.txt')]
 word_chain(words)
