@@ -32,20 +32,26 @@ def word_chain(collection):
     new_list.sort()
 
     #create new empty graph
-    g = nx.DiGraph()
+    g = nx.path_graph(len(new_list), create_using = nx.DiGraph())
+    #g = nx.DiGraph()
 
     #add all words to graph
     for word in new_list:
-        g.add_node(Node(word))
+        g.add_node(word)
 
     #fill graph with valid word chains
     for word in g.nodes():
         for c in string.ascii_lowercase:
-            new_word = Node(alphagramatize(word.key+c))
-            if(binary_search(new_list, new_word.key) != -1):
-                g.add_edge(word, new_word)
+            new_word = alphagramatize(word+c)
+            if(binary_search(new_list, new_word) != -1):
+                g.add_edge(word, new_word, weight = 1)
 
-    '''
+    #H = nx.Graph(g)
+    #for u, v in H.edges():
+    #    H[u][v]['weight'] *= -1
+
+    #print(nx.bellman_ford(H, 'a'))
+    
     #Naive approach            
     currentMax = 0
     longestPath = 0
@@ -55,14 +61,10 @@ def word_chain(collection):
                 for path in nx.all_simple_paths(g, startNode, endNode):
                     if len(path) > currentMax:
                         currentMax = len(path)
-                        longestPath = path
+                        longestPath = path    
+                        print(longestPath)
     
-    print(longestPath)
-    '''
 
-    dfs = DFS()
-
-    print dfs.dfs(g)
     #print nx.topological_sort(g)
     #print longest_path(g)
 
@@ -82,11 +84,12 @@ class DFS:
         for node in nx.topological_sort(G):
             if node.visited != True:
                 self.explore(node)
+            self.componentCntr += 1
 
     def explore(self, node):
         node.component = self.componentCntr
         print node.component
-        self.componentCntr += 1
+        
 
 
 
