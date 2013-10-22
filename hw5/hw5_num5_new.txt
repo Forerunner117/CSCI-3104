@@ -9,7 +9,7 @@
 import string
 import bisect
 import collections
-import networkx as nx #Open-source graph module (http://networkx.github.io/)
+import networkx as nx #OpenSource graph module (http://networkx.github.io/)
 
 #//////////////////////////////////////////////////////////////////////////////
 #word_chain takes a collection of words, converts them to alphagrams and outputs
@@ -89,3 +89,12 @@ def binary_search(a, x, lo=0, hi=None):   # can't use a to specify default for h
 #Run on full word list
 words = [word.strip() for word in open('wordlst.txt')]
 word_chain(words)
+
+
+'''
+Sample Output:
+--------------
+
+['OT', 'OST', 'OSST', 'OPSST', 'IOPSST', 'EIOPSST', 'EIOOPSST', 'EIIOOPSST', 'EIIOOPRSST', 'EIINOOPRSST', 'EIINOOPPRSST', 'EIINOOPPRSSTU', 'EIINOOPPRSSSTU', 'EIINOOPPPRSSSTU']
+
+'''
